@@ -1,4 +1,7 @@
 defmodule Transactions.Clients.Client.ChangesetTest do
+  @moduledoc """
+  Tests changeset validation
+  """
   use Transactions.DataCase
 
   alias Ecto.Changeset

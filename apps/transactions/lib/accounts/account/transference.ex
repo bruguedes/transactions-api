@@ -2,9 +2,9 @@ defmodule Transactions.Accounts.Account.Transference do
   @moduledoc """
   Executa as ações necessarias para executar a trasferencia entre contas.
   """
-  alias Transactions.Accounts.Account.ValidationInputs_for_Transection
-  alias Transactions.Accounts.Schemas.Account
   alias Transactions.Accounts.Account.GetAccount
+  alias Transactions.Accounts.Account.ValidationInputsForTransection
+  alias Transactions.Accounts.Schemas.Account
   alias Transactions.Repo
   import Ecto.Query
   require Logger
@@ -23,7 +23,7 @@ defmodule Transactions.Accounts.Account.Transference do
     Logger.info("Trasference request")
 
     params
-    |> ValidationInputs_for_Transection.build()
+    |> ValidationInputsForTransection.build()
     |> validate_accounts()
   end
 

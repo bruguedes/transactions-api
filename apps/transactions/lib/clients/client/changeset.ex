@@ -1,4 +1,7 @@
 defmodule Transactions.Clients.Client.Changeset do
+  @moduledoc """
+  validates the input data according to the rules required by the changeset
+  """
   @doc """
   Validates that the data passed as a parameter of the conn,
   is in accordance with the requested.

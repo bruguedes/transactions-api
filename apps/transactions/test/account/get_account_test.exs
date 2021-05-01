@@ -1,4 +1,7 @@
 defmodule Transactions.Accounts.Account.GetAccountTest do
+  @moduledoc """
+  Test get accounts
+  """
   use Transactions.DataCase
   alias Transactions.Accounts.Account.GetAccount
   alias Transactions.Clients.Client.Create

@@ -3,8 +3,8 @@ defmodule Transactions.Accounts.Account.GetAccount do
   performs query in the database using account number as
   search parameter
   """
-  alias Transactions.Repo
   alias Transactions.Accounts.Schemas.Account
+  alias Transactions.Repo
 
   @doc """
   get () function on success returns the tuple with

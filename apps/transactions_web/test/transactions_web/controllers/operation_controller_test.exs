@@ -28,10 +28,10 @@ defmodule TransactionsWeb.OperationControllerTest do
                "status" => 200,
                "transaction_data" => %{
                  "account" => _account,
-                 "current_balance" => 75000,
+                 "current_balance" => 75_000,
                  "id" => _id,
                  "name" => "account origin",
-                 "withdrawn_amount" => 25000
+                 "withdrawn_amount" => 25_000
                }
              } =
                conn
@@ -91,19 +91,19 @@ defmodule TransactionsWeb.OperationControllerTest do
       params = %{
         "source_account" => account_origin,
         "target_account" => account_destiny,
-        "requested_amount" => 25000
+        "requested_amount" => 25_000
       }
 
       assert %{
                "message" => "Transfer successfully completed!",
                "status" => 200,
                "transaction_data" => %{
-                 "current_balance" => 75000,
+                 "current_balance" => 75_000,
                  "name" => "account origin",
                  "beneficiary_name" => "account destiny",
                  "source_account" => _source_account,
                  "target_account" => _target_account,
-                 "transferred_value" => 25000
+                 "transferred_value" => 25_000
                }
              } =
                conn
@@ -117,7 +117,7 @@ defmodule TransactionsWeb.OperationControllerTest do
       params = %{
         "source_account" => "00000",
         "target_account" => account_destiny,
-        "requested_amount" => 25000
+        "requested_amount" => 25_000
       }
 
       assert %{"message" => "Account  not found!"} =
@@ -132,7 +132,7 @@ defmodule TransactionsWeb.OperationControllerTest do
       params = %{
         "source_account" => account_origin,
         "target_account" => "00000",
-        "requested_amount" => 25000
+        "requested_amount" => 25_000
       }
 
       assert %{"message" => "Account  not found!"} =

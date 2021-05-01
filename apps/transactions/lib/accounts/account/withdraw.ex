@@ -1,12 +1,15 @@
 defmodule Transactions.Accounts.Account.Withdraw do
-  alias Transactions.Accounts.Account.ValidationInputs_for_Transection
-  alias Transactions.Accounts.Schemas.Account
   alias Transactions.Accounts.Account.GetAccount
+  alias Transactions.Accounts.Account.ValidationInputsForTransection
+  alias Transactions.Accounts.Schemas.Account
   alias Transactions.Repo
   import Ecto.Query
 
   require Logger
 
+  @moduledoc """
+    Executes the withdrawal transaction
+  """
   @doc """
   functions:
     call(): makes the necessary calls to execute the withdrawal action.
@@ -28,7 +31,7 @@ defmodule Transactions.Accounts.Account.Withdraw do
     Logger.info("withdrawal request")
 
     params
-    |> ValidationInputs_for_Transection.build()
+    |> ValidationInputsForTransection.build()
     |> inputs_checked()
   end
 

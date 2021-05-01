@@ -1,4 +1,4 @@
-defmodule Transactions.Accounts.Account.ValidationInputs_for_Transection do
+defmodule Transactions.Accounts.Account.ValidationInputsForTransection do
   @moduledoc """
   Input data for calling insert_new_author/1.
   """
@@ -11,9 +11,9 @@ defmodule Transactions.Accounts.Account.ValidationInputs_for_Transection do
 
   @primary_key false
   embedded_schema do
-    field :source_account, :string
-    field :target_account, :string
-    field :requested_amount, :integer
+    field(:source_account, :string)
+    field(:target_account, :string)
+    field(:requested_amount, :integer)
   end
 
   def build(params) do

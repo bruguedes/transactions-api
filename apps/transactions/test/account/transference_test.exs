@@ -1,8 +1,11 @@
 defmodule Transactions.Accounts.Account.TransferenceTest do
+  @moduledoc """
+  Tests trasference
+  """
   use Transactions.DataCase
 
-  alias Transactions.Clients.Client.Create
   alias Transactions.Accounts.Account.Transference
+  alias Transactions.Clients.Client.Create
 
   @account_origin %{
     name: "account origin",
@@ -24,17 +27,17 @@ defmodule Transactions.Accounts.Account.TransferenceTest do
       params = %{
         "source_account" => account_origin,
         "target_account" => account_destiny,
-        "requested_amount" => 25000
+        "requested_amount" => 25_000
       }
 
       assert {:ok,
               %{
                 client_destiny_name: "account destiny",
                 client_origin_name: "account origin",
-                current_balance: 75000,
+                current_balance: 75_000,
                 source_account: _source_account,
                 target_account: _target_account,
-                transferred_value: 25000
+                transferred_value: 25_000
               }} = Transference.call(params)
     end
 

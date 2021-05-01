@@ -1,4 +1,7 @@
 defmodule Transactions.Clients.Client.CreateTest do
+  @moduledoc """
+    Tests create client
+  """
   use Transactions.DataCase
   alias Transactions.Clients.Client.Create
 

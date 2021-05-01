@@ -1,6 +1,8 @@
 defmodule Transactions.Accounts.Account.WithdrawTest do
+  @moduledoc """
+  Tests withdraw operation
+  """
   use Transactions.DataCase
-
   alias Transactions.Accounts.Account.Withdraw
   alias Transactions.Clients.Client.Create
 
@@ -16,23 +18,23 @@ defmodule Transactions.Accounts.Account.WithdrawTest do
 
       params = %{
         "source_account" => account_number,
-        "requested_amount" => 25000
+        "requested_amount" => 25_000
       }
 
       assert {:ok,
               %{
                 account: _account_number,
-                current_balance: 75000,
+                current_balance: 75_000,
                 id: _id,
                 name: _name_client,
-                withdrawn_amount: 25000
+                withdrawn_amount: 25_000
               }} = Withdraw.call(params)
     end
 
     test "if the account number is invalid" do
       params = %{
         "source_account" => "00000",
-        "requested_amount" => 25000
+        "requested_amount" => 25_000
       }
 
       assert {:error, "Account  not found!"} = Withdraw.call(params)

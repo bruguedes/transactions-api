@@ -41,7 +41,7 @@ defmodule Transactions.Clients.Client.Create do
 
   defp create_account(%{} = struct_client) do
     number_account =
-      Enum.random(10000..90000)
+      Enum.random(10_000..90_000)
       |> to_string
 
     Ecto.build_assoc(struct_client, :account, %Account{account: number_account, balance: 100_000})
