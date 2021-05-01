@@ -1,21 +1,24 @@
 # API in elixir and Phoenix
 
-API  em elixir e Phoenix, com foco estudo e pratica da liguagem elixir utilizando framework phoenix com estrutura umbrella, a api tem tres requisiços, create cliente, saque de valores e trasferencia entre contas.
+API in elixir and Phoenix, with a focus on study and practice of the elixir language using a phoenix framework with umbrella structure, api has three requirements, create client, withdrawal of values and transfer between accounts.
 
-Para executar o projeto, você precisa primeiro ter um contêiner Postgres em execução na porta 5432. Na raiz do projeto esta docker-compose que iniciara o dowload e levantara o servico de BD.
+note: When registering a new client and automatically generating a 5 digit account number, with a starting balance of R $ 1,000 represented in cents, then in the BD balance it will be: 100000.
 
-# Estando na pasta raiz pelo terminal siga os passos a seguir para iniciar o BD postgres utilizando docker,  criar o banco e suas tabelas:
+To run the project, you must first have a Postgres container running on port 5432. At the root of the project is this docker-compose that will start the download and raise the BD service.
 
-inicializando containet :`docker-compose up -d`
-Criando base de dados: `mix ecto.create`
-Gerando tabelas: `mix ecto.migrate` 
+Being in the root folder by the terminal follow the steps below to start the BD postgres using docker, create the bank and its tables:
 
-Baixando dependencias do projeto: `mix deps.get`
-To run tests: `mix test` 
-Inicializando o servidor: `mix phx.server`
+initializing containet: `docker-compose up -d`
+Creating database: `mix ecto.create`
+Generating tables: `mix ecto.migrate`
 
-Fazendo requisições:
-caso prefira pode utilizar o postman ou insomnia, para execurtar fazer as requisições tipo Post.
+Downloading project dependencies: `mix deps.get`
+To run tests: mix test
+Booting the server: `mix phx.server`
+
+
+Making requests:
+if you prefer, you can use the postman or insomnia, to make the post type requests.
 
 ``` sh
 Cadastrando um  usuario:
