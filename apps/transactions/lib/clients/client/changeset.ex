@@ -15,7 +15,7 @@ defmodule Transactions.Clients.Client.Changeset do
     |> apply_action(:insert)
   end
 
-  @required_params [:name, :email, :email_confirmation]
+  @required_params [:name, :email, :email_confirmation, :password, :password_confirmation]
   @email_regex ~r/^[A-Za-z0-9\._%+\-+']+@[A-Za-z0-9\.\-]+\.[A-Za-z]{2,4}$/
   def changeset(params) do
     %Client{}
@@ -24,5 +24,7 @@ defmodule Transactions.Clients.Client.Changeset do
     |> validate_format(:email, @email_regex)
     |> validate_format(:email_confirmation, @email_regex)
     |> validate_confirmation(:email, message: "Email and confirmation must be the same")
+    |> validate_length(:password, min: 6)
+    |> validate_confirmation(:password, message: "does not match password")
   end
 end
