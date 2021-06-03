@@ -10,8 +10,8 @@ defmodule Transactions do
   alias Transactions.Clients.Client
   alias Transactions.Clients.Inputs.ClientsCreate
 
-  @spec create(%ClientsCreate{}) :: {:error} | {:ok, map()}
-  defdelegate create(params), to: Client.Create, as: :create_client
+  @spec create_client(%ClientsCreate{}) :: {:error} | {:ok, map()}
+  defdelegate create_client(params), to: Client.Create, as: :create_client
 
   defdelegate req_withdraw(params), to: Account.Withdraw, as: :call
   defdelegate req_transference(params), to: Account.Transference, as: :call

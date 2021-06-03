@@ -8,7 +8,7 @@ defmodule TransactionsWeb.ClientController do
   @spec create(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def create(conn, params) do
     with {:ok, inputs} <- ClientsCreate.changeset(%ClientsCreate{}, params),
-         {:ok, client} <- Transactions.create(inputs) do
+         {:ok, client} <- Transactions.create_client(inputs) do
       conn
       |> put_status(201)
       |> put_resp_header("content-type", "application/json")

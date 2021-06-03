@@ -28,7 +28,7 @@ defmodule Transactions.Clients.Client.CreateTest do
                    id: _id,
                    name: "account origin"
                  },
-                 messege: "new client successfully created"
+                 message: "new client successfully created"
                }
              } = result_function
     end
@@ -39,6 +39,20 @@ defmodule Transactions.Clients.Client.CreateTest do
       result_function = Create.create_client(@new_client)
 
       assert {:error, "Email already registered"} = result_function
+    end
+
+    test "fails when no match for struct" do
+      parans = %{
+        name: "account origin",
+        email: "account@email.com",
+        email_confirmation: "account@email.com",
+        password: "123456",
+        password_confirmation: "123456"
+      }
+
+      result_function = Create.create_client(parans)
+
+      assert right: {:error, "Struct not valid"} = result_function
     end
   end
 end
