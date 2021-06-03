@@ -6,7 +6,9 @@ defmodule TransactionsWeb.ClientControllerTest do
       params = %{
         name: "Test Created",
         email: "test@email.com",
-        email_confirmation: "test@email.com"
+        email_confirmation: "test@email.com",
+        password: "123456",
+        password_confirmation: "123456"
       }
 
       assert %{
@@ -17,8 +19,7 @@ defmodule TransactionsWeb.ClientControllerTest do
                  "id" => _id,
                  "name" => "Test Created"
                },
-               "message" => "new client successfully created",
-               "status" => 201
+               "message" => "new client successfully created"
              } =
                conn
                |> post("/api/clients", params)
@@ -38,8 +39,7 @@ defmodule TransactionsWeb.ClientControllerTest do
         |> json_response(:bad_request)
 
       assert %{
-               "message" => %{"email_confirmation" => ["Email and confirmation must be the same"]},
-               "status" => 400
+               "message" => %{"email_confirmation" => ["Email and confirmation must be the same"]}
              } = response
     end
 
@@ -64,8 +64,32 @@ defmodule TransactionsWeb.ClientControllerTest do
                    "Email and confirmation must be the same",
                    "can't be blank"
                  ]
-               },
-               "status" => 400
+               }
+             } = response
+    end
+
+    test "When the password and password confirmation parameters are invalid, create the client",
+         %{
+           conn: conn
+         } do
+      params = %{
+        name: "Test Created",
+        email: "test@email.com",
+        email_confirmation: "test@email.com",
+        password: "123",
+        password_confirmation: "1234"
+      }
+
+      response =
+        conn
+        |> post(Routes.client_path(conn, :create, params))
+        |> json_response(:bad_request)
+
+      assert %{
+               "message" => %{
+                 "password" => ["should be at least 6 character(s)"],
+                 "password_confirmation" => ["Does not match password"]
+               }
              } = response
     end
   end

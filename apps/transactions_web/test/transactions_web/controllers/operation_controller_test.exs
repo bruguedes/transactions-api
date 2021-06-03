@@ -16,7 +16,7 @@ defmodule TransactionsWeb.OperationControllerTest do
 
   describe "withdraw/2" do
     test "When all parameters are valid, execute the withdrawal", %{conn: conn} do
-      {:ok, %{account: account_number}} = Create.call(@account)
+      {:ok, %{account: account_number}} = Create.create_client(@account)
 
       params = %{
         "source_account" => account_number,
@@ -55,7 +55,7 @@ defmodule TransactionsWeb.OperationControllerTest do
     end
 
     test "When the requested amount is greater than available..", %{conn: conn} do
-      {:ok, %{account: account_number}} = Create.call(@account)
+      {:ok, %{account: account_number}} = Create.create_client(@account)
 
       params = %{
         "source_account" => account_number,
@@ -69,7 +69,7 @@ defmodule TransactionsWeb.OperationControllerTest do
     end
 
     test "When the requested amount is greater than ..", %{conn: conn} do
-      {:ok, %{account: account_number}} = Create.call(@account)
+      {:ok, %{account: account_number}} = Create.create_client(@account)
 
       params = %{
         "source_account" => account_number,
@@ -85,8 +85,8 @@ defmodule TransactionsWeb.OperationControllerTest do
 
   describe "transference/2" do
     test "When all parameters are valid, execute the trasference", %{conn: conn} do
-      {:ok, %{account: account_origin}} = Create.call(@account)
-      {:ok, %{account: account_destiny}} = Create.call(@account_for_transference)
+      {:ok, %{account: account_origin}} = Create.create_client(@account)
+      {:ok, %{account: account_destiny}} = Create.create_client(@account_for_transference)
 
       params = %{
         "source_account" => account_origin,
@@ -112,7 +112,7 @@ defmodule TransactionsWeb.OperationControllerTest do
     end
 
     test "When the original account number is invalid.", %{conn: conn} do
-      {:ok, %{account: account_destiny}} = Create.call(@account_for_transference)
+      {:ok, %{account: account_destiny}} = Create.create_client(@account_for_transference)
 
       params = %{
         "source_account" => "00000",
@@ -127,7 +127,7 @@ defmodule TransactionsWeb.OperationControllerTest do
     end
 
     test "When the destination account number is invalid.", %{conn: conn} do
-      {:ok, %{account: account_origin}} = Create.call(@account_for_transference)
+      {:ok, %{account: account_origin}} = Create.create_client(@account_for_transference)
 
       params = %{
         "source_account" => account_origin,
@@ -142,8 +142,8 @@ defmodule TransactionsWeb.OperationControllerTest do
     end
 
     test "When requested amount is greater than the account balance", %{conn: conn} do
-      {:ok, %{account: account_origin}} = Create.call(@account)
-      {:ok, %{account: account_destiny}} = Create.call(@account_for_transference)
+      {:ok, %{account: account_origin}} = Create.create_client(@account)
+      {:ok, %{account: account_destiny}} = Create.create_client(@account_for_transference)
 
       params = %{
         "source_account" => account_origin,
