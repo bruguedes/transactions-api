@@ -8,9 +8,9 @@ defmodule Transactions.Accounts.Account.GetAccount do
 
   @doc """
   get () function on success returns the tuple with
-   {: ok, account_data}
+   {:ok, account_data}
   """
-  def get(account) do
+  def get(account) when is_binary(account) do
     case Repo.get_by(Account, account: account) do
       nil -> {:error, "Account  not found!"}
       account -> {:ok, account}

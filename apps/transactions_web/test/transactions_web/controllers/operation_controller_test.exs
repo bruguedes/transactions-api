@@ -1,14 +1,16 @@
 defmodule TransactionsWeb.OperationControllerTest do
   use TransactionsWeb.ConnCase
 
+  alias Transactions.Accounts.Inputs.Withdraw
   alias Transactions.Clients.Client.Create
+  alias Transactions.Clients.Inputs.ClientsCreate
 
-  @account %{
+  @account %ClientsCreate{
     name: "account origin",
     email: "account@email.com",
     email_confirmation: "account@email.com"
   }
-  @account_for_transference %{
+  @account_for_transference %ClientsCreate{
     name: "account destiny",
     email: "destiny@email.com",
     email_confirmation: "destiny@email.com"
@@ -16,7 +18,7 @@ defmodule TransactionsWeb.OperationControllerTest do
 
   describe "withdraw/2" do
     test "When all parameters are valid, execute the withdrawal", %{conn: conn} do
-      {:ok, %{account: account_number}} = Create.create_client(@account)
+      {:ok, %{client: %{account: account_number}}} = Create.create_client(@account)
 
       params = %{
         "source_account" => account_number,
@@ -25,7 +27,6 @@ defmodule TransactionsWeb.OperationControllerTest do
 
       assert %{
                "message" => "Withdrawal successful!",
-               "status" => 200,
                "transaction_data" => %{
                  "account" => _account,
                  "current_balance" => 75_000,
@@ -46,16 +47,15 @@ defmodule TransactionsWeb.OperationControllerTest do
       }
 
       assert %{
-               "message" => %{"source_account" => ["should be at most 5 character(s)"]},
-               "status" => 400
+               "message" => %{"source_account" => ["should be at most 5 character(s)"]}
              } =
                conn
                |> post("/api/operation/withdraw", params)
                |> json_response(:bad_request)
     end
 
-    test "When the requested amount is greater than available..", %{conn: conn} do
-      {:ok, %{account: account_number}} = Create.create_client(@account)
+    test "When the requested amount is greater than available.", %{conn: conn} do
+      {:ok, %{client: %{account: account_number}}} = Create.create_client(@account)
 
       params = %{
         "source_account" => account_number,
@@ -69,14 +69,14 @@ defmodule TransactionsWeb.OperationControllerTest do
     end
 
     test "When the requested amount is greater than ..", %{conn: conn} do
-      {:ok, %{account: account_number}} = Create.create_client(@account)
+      {:ok, %{client: %{account: account_number}}} = Create.create_client(@account)
 
       params = %{
         "source_account" => account_number,
         "requested_amount" => "invalid"
       }
 
-      assert %{"message" => %{"requested_amount" => ["is invalid"]}, "status" => 400} ==
+      assert %{"message" => %{"requested_amount" => ["is invalid"]}} ==
                conn
                |> post("/api/operation/withdraw", params)
                |> json_response(:bad_request)
