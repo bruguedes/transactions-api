@@ -1,12 +1,17 @@
 defmodule TransactionsWeb.OperationController do
   use TransactionsWeb, :controller
+  alias Transactions.Accounts.Inputs.Withdraw
 
-  action_fallback TransactionsWeb.FallbackController
+  action_fallback(TransactionsWeb.FallbackController)
 
   def withdraw(conn, params) do
-    params
-    |> Transactions.req_withdraw()
-    |> handle_response_withdrawn(conn, 200, "Withdrawal successful!")
+    with {:ok, input} <- Withdraw.changeset(%Withdraw{}, params),
+         {:ok, response} <- Transactions.req_withdraw(input) do
+      conn
+      |> put_status(200)
+      |> put_resp_header("content-type", "application/json")
+      |> send_resp(200, Jason.encode!(response))
+    end
   end
 
   def transference(conn, params) do
@@ -14,35 +19,6 @@ defmodule TransactionsWeb.OperationController do
     |> Transactions.req_transference()
     |> handle_response_transference(conn, 200, "Transfer successfully completed!")
   end
-
-  defp handle_response_withdrawn({:ok, account}, conn, status, msg) do
-    %{
-      id: id,
-      name: name,
-      account: account,
-      current_balance: current_balance,
-      withdrawn_amount: withdrawn_amount
-    } = account
-
-    for_encoder = %{
-      status: status,
-      transaction_data: %{
-        id: id,
-        name: name,
-        account: account,
-        current_balance: current_balance,
-        withdrawn_amount: withdrawn_amount
-      },
-      message: msg
-    }
-
-    conn
-    |> put_status(200)
-    |> put_resp_header("content-type", "application/json")
-    |> send_resp(200, Jason.encode!(for_encoder))
-  end
-
-  defp handle_response_withdrawn({:error, _changerset} = error, _conn, _status, _msg), do: error
 
   defp handle_response_transference({:ok, account}, conn, status, msg) do
     %{

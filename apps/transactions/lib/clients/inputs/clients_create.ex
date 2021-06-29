@@ -15,7 +15,6 @@ defmodule Transactions.Clients.Inputs.ClientsCreate do
     field(:email_confirmation, :string, virtual: true)
   end
 
-  @required_params [:name, :email, :email_confirmation, :password, :password_confirmation]
   @email_regex ~r/^[A-Za-z0-9\._%+\-+']+@[A-Za-z0-9\.\-]+\.[A-Za-z]{2,4}$/
 
   @doc false

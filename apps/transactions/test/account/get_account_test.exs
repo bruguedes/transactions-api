@@ -5,15 +5,18 @@ defmodule Transactions.Accounts.Account.GetAccountTest do
   use Transactions.DataCase
   alias Transactions.Accounts.Account.GetAccount
   alias Transactions.Clients.Client.Create
+  alias Transactions.Clients.Inputs.ClientsCreate
 
   describe "get/1" do
     test "fetches account data when parameters are valid
     When" do
-      {:ok, %{account: account}} =
-        Create.call(%{
+      {:ok, %{client: %{account: account}}} =
+        Create.create_client(%ClientsCreate{
           name: "Test Created",
           email: "test@email.com",
-          email_confirmation: "test@email.com"
+          email_confirmation: "test@email.com",
+          password: "123456",
+          password_confirmation: "123456"
         })
 
       result_function = GetAccount.get(account)
