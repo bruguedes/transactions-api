@@ -19,8 +19,6 @@ defmodule Transactions.Accounts.Account.GetAccountTest do
           password_confirmation: "123456"
         })
 
-      result_function = GetAccount.get(account)
-
       assert {
                :ok,
                %Transactions.Accounts.Schemas.Account{
@@ -31,7 +29,7 @@ defmodule Transactions.Accounts.Account.GetAccountTest do
                  inserted_at: _inserted_at,
                  updated_at: _updated_at
                }
-             } = result_function
+             } = GetAccount.get(account)
     end
   end
 

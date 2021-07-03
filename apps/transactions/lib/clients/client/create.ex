@@ -50,14 +50,11 @@ defmodule Transactions.Clients.Client.Create do
 
     {:ok,
      %{
-       message: "new client successfully created",
-       client: %{
-         id: client.id,
-         name: client.name,
-         email: client.email,
-         account: account,
-         balance: balance
-       }
+       id: client.id,
+       name: client.name,
+       email: client.email,
+       account: account,
+       balance: balance
      }}
   end
 end

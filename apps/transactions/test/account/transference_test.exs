@@ -5,29 +5,34 @@ defmodule Transactions.Accounts.Account.TransferenceTest do
   use Transactions.DataCase
 
   alias Transactions.Accounts.Account.Transference
+  alias Transactions.Accounts.Inputs.Transference, as: Input_Trasference
   alias Transactions.Clients.Client.Create
+  alias Transactions.Clients.Inputs.ClientsCreate
 
-  @account_origin %{
-    name: "account origin",
-    email: "origin@email.com",
-    email_confirmation: "origin@email.com"
-  }
+  setup do
+    {:ok, %{account: account_origin}} =
+      Create.create_client(%ClientsCreate{
+        name: "account origin",
+        email: "origin@email.com",
+        email_confirmation: "origin@email.com"
+      })
 
-  @account_destiny %{
-    name: "account destiny",
-    email: "destiny@email.com",
-    email_confirmation: "destiny@email.com"
-  }
+    {:ok, %{account: account_destiny}} =
+      Create.create_client(%ClientsCreate{
+        name: "account destiny",
+        email: "destiny@email.com",
+        email_confirmation: "destiny@email.com"
+      })
+
+    {:ok, account_origin: account_origin, account_destiny: account_destiny}
+  end
 
   describe "call/1" do
-    test "if valid parameters, make the transaction between accounts" do
-      {:ok, %{account: account_origin}} = Create.call(@account_origin)
-      {:ok, %{account: account_destiny}} = Create.call(@account_destiny)
-
-      params = %{
-        "source_account" => account_origin,
-        "target_account" => account_destiny,
-        "requested_amount" => 25_000
+    test "if valid parameters, make the transaction between accounts", ctx do
+      params = %Input_Trasference{
+        source_account: ctx.account_origin,
+        target_account: ctx.account_destiny,
+        requested_amount: 25_000
       }
 
       assert {:ok,
@@ -41,65 +46,35 @@ defmodule Transactions.Accounts.Account.TransferenceTest do
               }} = Transference.call(params)
     end
 
-    test "If balance does not meet the condition" do
-      {:ok, %{account: account_origin}} = Create.call(@account_origin)
-      {:ok, %{account: account_destiny}} = Create.call(@account_destiny)
-
-      params = %{
-        "source_account" => account_origin,
-        "target_account" => account_destiny,
-        "requested_amount" => 150_000
+    test "If balance does not meet the condition", ctx do
+      params = %Input_Trasference{
+        source_account: ctx.account_origin,
+        target_account: ctx.account_destiny,
+        requested_amount: 125_000
       }
 
       assert {:error, "Insufficient funds"} == Transference.call(params)
     end
 
-    test "If account origin does not meet the condition" do
-      # {:ok, %{account: account_origin}} = Create.call(@account_origin)
-      {:ok, %{account: account_destiny}} = Create.call(@account_destiny)
-
-      params = %{
-        "source_account" => "",
-        "target_account" => account_destiny,
-        "requested_amount" => 150_000
-      }
-
-      assert {:error,
-              %Ecto.Changeset{
-                action: :insert,
-                errors: [source_account: {"can't be blank", [validation: :required]}],
-                valid?: false
-              }} = Transference.call(params)
-    end
-
-    test "If account destiny does not meet the condition" do
-      {:ok, %{account: account_origin}} = Create.call(@account_origin)
-
-      params = %{
-        "source_account" => account_origin,
-        "target_account" => "12312",
-        "requested_amount" => 150_000
+    test "If account destiny does not meet the condition", ctx do
+      params = %Input_Trasference{
+        source_account: ctx.account_origin,
+        target_account: "121212",
+        requested_amount: 25_000
       }
 
       assert {:error, "Account  not found!"} = Transference.call(params)
     end
 
-    test "If value does not meet the condition" do
-      {:ok, %{account: account_origin}} = Create.call(@account_origin)
-      {:ok, %{account: account_destiny}} = Create.call(@account_destiny)
-
-      params = %{
-        "source_account" => account_origin,
-        "target_account" => account_destiny,
-        "requested_amount" => "123er"
+    test "fail if equal destination and origin account", ctx do
+      params = %Input_Trasference{
+        source_account: ctx.account_origin,
+        target_account: ctx.account_origin,
+        requested_amount: 25_000
       }
 
-      assert {:error,
-              %Ecto.Changeset{
-                action: :insert,
-                errors: [requested_amount: {"is invalid", [type: :integer, validation: :cast]}],
-                valid?: false
-              }} = Transference.call(params)
+      assert {:error, "Destination account must be different from origin"} =
+               Transference.call(params)
     end
   end
 end

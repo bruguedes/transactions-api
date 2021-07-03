@@ -21,16 +21,14 @@ defmodule Transactions.Clients.Client.CreateTest do
       assert {
                :ok,
                %{
-                 client: %{
-                   account: _account,
-                   balance: 100_000,
-                   email: "account@email.com",
-                   id: _id,
-                   name: "account origin"
-                 },
-                 message: "new client successfully created"
+                 account: _account,
+                 balance: 100_000,
+                 email: "account@email.com",
+                 id: _id,
+                 name: "account origin"
                }
-             } = result_function
+             } =
+               result_function
     end
 
     test "fails when email is already in use" do
