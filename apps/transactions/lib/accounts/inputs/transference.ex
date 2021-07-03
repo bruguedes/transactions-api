@@ -1,13 +1,12 @@
-defmodule Transactions.Accounts.Account.ValidationInputsForTransection do
+defmodule Transactions.Accounts.Inputs.Transference do
   @moduledoc """
-  Input data for calling insert_new_author/1.
+  Input data for new transference.
   """
   use Ecto.Schema
 
   import Ecto.Changeset
 
-  @required [:source_account, :requested_amount]
-  @optional [:target_account]
+  @required [:source_account, :requested_amount, :target_account]
 
   @primary_key false
   embedded_schema do
@@ -16,17 +15,12 @@ defmodule Transactions.Accounts.Account.ValidationInputsForTransection do
     field(:requested_amount, :integer)
   end
 
-  def build(params) do
-    params
-    |> changeset()
-    |> apply_action(:insert)
-  end
-
-  def changeset(params) do
-    %__MODULE__{}
-    |> cast(params, @required ++ @optional)
+  def changeset(model \\ %__MODULE__{}, params) do
+    model
+    |> cast(params, @required)
     |> validate_required(@required)
     |> validate_length(:source_account, min: 5, max: 5)
     |> validate_length(:target_account, min: 5, max: 5)
+    |> apply_action(:insert)
   end
 end

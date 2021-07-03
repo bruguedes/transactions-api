@@ -2,39 +2,32 @@ defmodule Transactions.Accounts.Account.Transference do
   @moduledoc """
   Executa as ações necessarias para executar a trasferencia entre contas.
   """
+  import Ecto.Query
   alias Transactions.Accounts.Account.GetAccount
-  alias Transactions.Accounts.Account.ValidationInputsForTransection
+  alias Transactions.Accounts.Inputs.Transference
   alias Transactions.Accounts.Schemas.Account
   alias Transactions.Repo
-  import Ecto.Query
+
   require Logger
 
   @doc """
   functions:
-     call():makes the necessary calls to carry out the referral actions.
-     validate_accounts():queries the source account and checks for available balance
+     call(): queries the source account and checks for available balance
                          for transfer and validates the existence of the destination account.
-     perform_transfer ():performs the withdrawal of value or credits the amount, type of action and determined
+     perform_transfer():performs the withdrawal of value or credits the amount, type of action and determined
                          through: to_remove or: credit, passed as a parameter together with account and value.
      response_trasference():Assemble the tuple that will be the return of the call () function that is being called by the trasference function of the
      of the transaction_controller module.
   """
-  def call(params) do
+  def call(
+        %Transference{
+          source_account: account_origin,
+          target_account: account_destiny,
+          requested_amount: value
+        } = _params
+      ) do
     Logger.info("Trasference request")
 
-    params
-    |> ValidationInputsForTransection.build()
-    |> validate_accounts()
-  end
-
-  defp validate_accounts(
-         {:ok,
-          %{
-            source_account: account_origin,
-            target_account: account_destiny,
-            requested_amount: value
-          }}
-       ) do
     with {:ok, origin} <- GetAccount.get(account_origin),
          {:ok, destiny} <- GetAccount.get(account_destiny),
          true <- origin.balance >= value do
@@ -49,8 +42,6 @@ defmodule Transactions.Accounts.Account.Transference do
       false -> {:error, "Insufficient funds"}
     end
   end
-
-  defp validate_accounts({:error, changeset}), do: {:error, changeset}
 
   def perform_transfer(account, value, operation) do
     case operation do

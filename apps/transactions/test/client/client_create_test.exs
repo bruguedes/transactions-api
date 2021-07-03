@@ -4,48 +4,55 @@ defmodule Transactions.Clients.Client.CreateTest do
   """
   use Transactions.DataCase
   alias Transactions.Clients.Client.Create
+  alias Transactions.Clients.Inputs.ClientsCreate
 
-  describe "call/1" do
+  @new_client %ClientsCreate{
+    name: "account origin",
+    email: "account@email.com",
+    email_confirmation: "account@email.com",
+    password: "123456",
+    password_confirmation: "123456"
+  }
+
+  describe "create_client/1" do
     test "if valid parameters resets the insertion data in the database" do
-      params = %{
-        name: "Test Created",
-        email: "test@email.com",
-        email_confirmation: "test@email.com"
-      }
+      result_function = Create.create_client(@new_client)
 
-      result_function = Create.call(params)
-
-      assert {:ok,
-              %{
-                account: _account_number,
-                balance: 100_000,
-                email: "test@email.com",
-                id: _id,
-                name: "Test Created"
-              }} = result_function
+      assert {
+               :ok,
+               %{
+                 client: %{
+                   account: _account,
+                   balance: 100_000,
+                   email: "account@email.com",
+                   id: _id,
+                   name: "account origin"
+                 },
+                 message: "new client successfully created"
+               }
+             } = result_function
     end
 
-    test "when a invalid file, returns mensege of error" do
-      params = %{
-        name: "Test Created",
-        email: "test@email.com",
-        email_confirmation: ""
+    test "fails when email is already in use" do
+      Create.create_client(@new_client)
+
+      result_function = Create.create_client(@new_client)
+
+      assert {:error, "Email already registered"} = result_function
+    end
+
+    test "fails when no match for struct" do
+      parans = %{
+        name: "account origin",
+        email: "account@email.com",
+        email_confirmation: "account@email.com",
+        password: "123456",
+        password_confirmation: "123456"
       }
 
-      result_function = Create.call(params)
+      result_function = Create.create_client(parans)
 
-      assert {:error,
-              %Ecto.Changeset{
-                action: :insert,
-                changes: %{email: "test@email.com", name: "Test Created"},
-                errors: [
-                  email_confirmation:
-                    {"Email and confirmation must be the same", [validation: :confirmation]},
-                  email_confirmation: {"can't be blank", [validation: :required]}
-                ],
-                data: %Transactions.Clients.Schemas.Client{},
-                valid?: false
-              }} = result_function
+      assert right: {:error, "Struct not valid"} = result_function
     end
   end
 end
