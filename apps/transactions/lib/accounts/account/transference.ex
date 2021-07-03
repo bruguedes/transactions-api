@@ -30,7 +30,8 @@ defmodule Transactions.Accounts.Account.Transference do
 
     with {:ok, origin} <- GetAccount.get(account_origin),
          {:ok, destiny} <- GetAccount.get(account_destiny),
-         true <- origin.balance >= value do
+         true <- origin.balance >= value,
+         false <- origin == destiny do
       updated_source_balance = perform_transfer(origin, value, :to_remove)
 
       updated_destination_balance = perform_transfer(destiny, value, :credit)
@@ -40,6 +41,7 @@ defmodule Transactions.Accounts.Account.Transference do
       {:error, origin} -> {:error, origin}
       {:error, destiny} -> {:error, destiny}
       false -> {:error, "Insufficient funds"}
+      true -> {:error, "Destination account must be different from origin"}
     end
   end
 
