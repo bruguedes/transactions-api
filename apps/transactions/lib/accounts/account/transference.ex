@@ -28,8 +28,8 @@ defmodule Transactions.Accounts.Account.Transference do
       ) do
     Logger.info("Trasference request")
 
-    with {:ok, origin} <- GetAccount.get(account_origin),
-         {:ok, destiny} <- GetAccount.get(account_destiny),
+    with {:ok, origin} <- GetAccount.get(account_origin, :source_account),
+         {:ok, destiny} <- GetAccount.get(account_destiny, :target_account),
          true <- origin.balance >= value,
          false <- origin == destiny do
       updated_source_balance = perform_transfer(origin, value, :to_remove)

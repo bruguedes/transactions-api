@@ -27,7 +27,7 @@ defmodule Transactions.Accounts.Account.Withdraw do
     Logger.info("withdrawal request")
 
     account
-    |> GetAccount.get()
+    |> GetAccount.get(:source_account)
     |> check_balance(value)
     |> withdraw
     |> response_withdraw

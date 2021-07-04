@@ -28,7 +28,7 @@ defmodule Transactions.Accounts.Account.TransferenceTest do
   end
 
   describe "call/1" do
-    test "if valid parameters, make the transaction between accounts", ctx do
+    test "sucess if valid parameters, make the transaction between accounts", ctx do
       params = %Input_Trasference{
         source_account: ctx.account_origin,
         target_account: ctx.account_destiny,
@@ -46,7 +46,7 @@ defmodule Transactions.Accounts.Account.TransferenceTest do
               }} = Transference.call(params)
     end
 
-    test "If balance does not meet the condition", ctx do
+    test "fail if balance does not meet the condition", ctx do
       params = %Input_Trasference{
         source_account: ctx.account_origin,
         target_account: ctx.account_destiny,
@@ -56,14 +56,24 @@ defmodule Transactions.Accounts.Account.TransferenceTest do
       assert {:error, "Insufficient funds"} == Transference.call(params)
     end
 
-    test "If account destiny does not meet the condition", ctx do
+    test "fail account origin does not meet the condition", ctx do
+      params = %Input_Trasference{
+        source_account: "111111",
+        target_account: ctx.account_destiny,
+        requested_amount: 25_000
+      }
+
+      assert {:error, "source_account account  not found!"} = Transference.call(params)
+    end
+
+    test "fail account destiny does not meet the condition", ctx do
       params = %Input_Trasference{
         source_account: ctx.account_origin,
         target_account: "121212",
         requested_amount: 25_000
       }
 
-      assert {:error, "Account  not found!"} = Transference.call(params)
+      assert {:error, "target_account account  not found!"} = Transference.call(params)
     end
 
     test "fail if equal destination and origin account", ctx do

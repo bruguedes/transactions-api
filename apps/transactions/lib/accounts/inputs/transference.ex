@@ -6,6 +6,8 @@ defmodule Transactions.Accounts.Inputs.Transference do
 
   import Ecto.Changeset
 
+  alias Transactions.Accounts.Inputs.CustomValidate, as: Validate
+
   @required [:source_account, :requested_amount, :target_account]
 
   @primary_key false
@@ -21,6 +23,8 @@ defmodule Transactions.Accounts.Inputs.Transference do
     |> validate_required(@required)
     |> validate_length(:source_account, min: 5, max: 5)
     |> validate_length(:target_account, min: 5, max: 5)
-    |> apply_action(:insert)
+    |> Validate.account_is_integer(:source_account)
+    |> Validate.account_is_integer(:target_account)
+    |> apply_action(:trasference)
   end
 end

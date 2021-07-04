@@ -4,67 +4,66 @@ defmodule Transactions.Accounts.Account.WithdrawTest do
   """
   use Transactions.DataCase
   alias Transactions.Accounts.Account.Withdraw
+  alias Transactions.Accounts.Inputs.Withdraw, as: Inputs_Withdraw
   alias Transactions.Clients.Client.Create
+  alias Transactions.Clients.Inputs.ClientsCreate
 
-  @account %{
-    name: "account Withdraw",
-    email: "account@email.com",
-    email_confirmation: "account@email.com"
-  }
+  setup do
+    {:ok, %{account: account}} =
+      Create.create_client(%ClientsCreate{
+        name: "account origin",
+        email: "origin@email.com",
+        email_confirmation: "origin@email.com"
+      })
+
+    {:ok, %{account: account_destiny}} =
+      Create.create_client(%ClientsCreate{
+        name: "account destiny",
+        email: "destiny@email.com",
+        email_confirmation: "destiny@email.com"
+      })
+
+    {:ok, account: account, account_destiny: account_destiny}
+  end
 
   describe "call/1" do
-    test "if all parameters are correct" do
-      {:ok, %{account: account_number}} = Create.call(@account)
-
-      params = %{
-        "source_account" => account_number,
-        "requested_amount" => 25_000
+    test "sucess if all parameters are correct", ctx do
+      params = %Inputs_Withdraw{
+        source_account: ctx.account,
+        requested_amount: 25_000
       }
 
-      assert {:ok,
-              %{
-                account: _account_number,
-                current_balance: 75_000,
-                id: _id,
-                name: _name_client,
-                withdrawn_amount: 25_000
-              }} = Withdraw.call(params)
+      assert {
+               :ok,
+               %{
+                 message: "Withdrawal successful!",
+                 transaction_data: %{
+                   account: _,
+                   current_balance: 75_000,
+                   id: _,
+                   name: "account origin",
+                   withdrawn_amount: 25_000
+                 }
+               }
+             } = Withdraw.call(params)
     end
 
-    test "if the account number is invalid" do
-      params = %{
-        "source_account" => "00000",
-        "requested_amount" => 25_000
+    test "fail if the account number is invalid" do
+      params = %Inputs_Withdraw{
+        source_account: "00000",
+        requested_amount: 25_000
       }
 
-      assert {:error, "Account  not found!"} = Withdraw.call(params)
+      assert {:error, "source_account account  not found!"} = Withdraw.call(params)
     end
 
-    test "if the requested amount is greater than in account" do
-      {:ok, %{account: account_number}} = Create.call(@account)
-
-      params = %{
-        "source_account" => account_number,
-        "requested_amount" => 215_000
+    test "fail if the requested amount is greater than in account", ctx do
+      params = %Inputs_Withdraw{
+        source_account: ctx.account,
+        requested_amount: 255_000
       }
 
       assert {:error, "Insufficient funds"} = Withdraw.call(params)
-    end
-
-    test "If the requested amount is in invalid format" do
-      {:ok, %{account: account_number}} = Create.call(@account)
-
-      params = %{
-        "source_account" => account_number,
-        "requested_amount" => "45dss"
-      }
-
-      assert {:error,
-              %Ecto.Changeset{
-                action: :insert,
-                errors: [requested_amount: {"is invalid", [type: :integer, validation: :cast]}],
-                valid?: false
-              }} = Withdraw.call(params)
     end
   end
 end

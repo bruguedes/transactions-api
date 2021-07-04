@@ -10,9 +10,9 @@ defmodule Transactions.Accounts.Account.GetAccount do
   get () function on success returns the tuple with
    {:ok, account_data}
   """
-  def get(account) when is_binary(account) do
+  def get(account, account_type) when is_binary(account) and is_atom(account_type) do
     case Repo.get_by(Account, account: account) do
-      nil -> {:error, "Account  not found!"}
+      nil -> {:error, "#{account_type} account  not found!"}
       account -> {:ok, account}
     end
   end

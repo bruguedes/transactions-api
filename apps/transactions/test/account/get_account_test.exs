@@ -8,9 +8,8 @@ defmodule Transactions.Accounts.Account.GetAccountTest do
   alias Transactions.Clients.Inputs.ClientsCreate
 
   describe "get/1" do
-    test "fetches account data when parameters are valid
-    When" do
-      {:ok, %{client: %{account: account}}} =
+    test "fetches account data when parameters are valid" do
+      {:ok, %{account: account}} =
         Create.create_client(%ClientsCreate{
           name: "Test Created",
           email: "test@email.com",
@@ -29,13 +28,13 @@ defmodule Transactions.Accounts.Account.GetAccountTest do
                  inserted_at: _inserted_at,
                  updated_at: _updated_at
                }
-             } = GetAccount.get(account)
+             } = GetAccount.get(account, :source_account)
     end
   end
 
   test "when search parameter is invalid" do
-    result_function = GetAccount.get("123456")
+    result_function = GetAccount.get("12345", :source_account)
 
-    assert right: {:error, "Account  not found!"} == result_function
+    assert right: {:error, "source_account account  not found!"} = result_function
   end
 end
