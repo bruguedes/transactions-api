@@ -34,20 +34,21 @@ Registering a user:
 POST http://localhost:4000/api/clients {
 	"name": "client",
 	"email": "client@email.com",
-	"email_confirmation": "client@email.com"
+	"email_confirmation": "client@email.com",
+	"password": "123456",
+	"password_confirmation": "123456"
 }
 
 > return:
-{
-  "client": {
-    "account": "27234",
+{ 
+  "client_data": {
+    "account": "83327",
     "balance": 100000,
     "email": "client@email.com",
-    "id": "757edbd6-25a3-4594-af16-5a544838e221",
+    "id": "9c4069b1-c235-4426-b315-8701e5fe2a99",
     "name": "client"
   },
-  "message": "new client successfully created",
-  "status": 201
+  "message": "new client successfully created!"
 }
 
 ```
@@ -60,19 +61,18 @@ Requesting a withdrawal:
 note: For testing you must first create a new user.
 
 POST http://localhost:4000/api/operation/withdraw {
-	"source_account": "27234",
-	"requested_amount": 1000	
+	"source_account": "83327",
+	"requested_amount": "5000"	
 }
 >return:
 {
   "message": "Withdrawal successful!",
-  "status": 200,
   "transaction_data": {
-    "account": "27234",
-    "current_balance": 99000,
-    "id": "757edbd6-25a3-4594-af16-5a544838e221",
+    "account": "83327",
+    "current_balance": 95000,
+    "id": "9c4069b1-c235-4426-b315-8701e5fe2a99",
     "name": "client",
-    "withdrawn_amount": 1000
+    "withdrawn_amount": 5000
   }
 }
 ```
@@ -84,21 +84,20 @@ Requesting transfer:
 note: For this test, you must have at least two user registers.
 
 POST http://localhost:4000/api//operation/transference{
-	"source_account": "27234",
-	"target_account": "48654",
-	"requested_amount": 20000	
+	"source_account": "83327",
+	"target_account": "70450",
+	"requested_amount": 5000
 }
 >return:
 {
   "message": "Transfer successfully completed!",
-  "status": 200,
   "transaction_data": {
-    "beneficiary_name": "clint beneficiary",
-    "current_balance": 79000,
-    "name": "client",
-    "source_account": "27234",
-    "target_account": "48654",
-    "transferred_value": 20000
+    "client_destiny_name": "clint beneficiary",
+    "client_origin_name": "client",
+    "current_balance": 90000,
+    "source_account": "83327",
+    "target_account": "70450",
+    "transferred_value": 5000
   }
 }
 ```

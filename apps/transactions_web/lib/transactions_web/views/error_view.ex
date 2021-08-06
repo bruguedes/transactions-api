@@ -18,7 +18,6 @@ defmodule TransactionsWeb.ErrorView do
 
   def render("error.json", %{result: %Ecto.Changeset{} = result}) do
     %{
-      status: 400,
       message: translate_errors(result)
     }
   end

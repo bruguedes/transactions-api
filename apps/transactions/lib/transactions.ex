@@ -6,14 +6,13 @@ defmodule Transactions do
   Contexts are also responsible for managing your data, regardless
   if it comes from the database, an external API or others.
   """
-  alias Transactions.Clients.Client
   alias Transactions.Accounts.Account
+  alias Transactions.Clients.Client
+  alias Transactions.Clients.Inputs.ClientsCreate
 
-  defdelegate create_client(params), to: Client.Create, as: :call
+  @spec create_client(%ClientsCreate{}) :: {:error} | {:ok, map()}
+  defdelegate create_client(params), to: Client.Create, as: :create_client
 
   defdelegate req_withdraw(params), to: Account.Withdraw, as: :call
   defdelegate req_transference(params), to: Account.Transference, as: :call
-
-  # defdelegate delete_client(params), to: Client.Delete, as: :call
-  # defdelegate fetch_client(params), to: Client.Get, as: :call
 end
