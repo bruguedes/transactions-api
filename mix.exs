@@ -7,7 +7,17 @@ defmodule Transactions.Umbrella.MixProject do
       version: "0.1.0",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      aliases: aliases()
+      aliases: aliases(),
+      test_coverage: [tool: ExCoveralls],
+      elixirc_options: [warnings_as_errors: true],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test,
+        "panda.test_setup": :test,
+        "panda.test_reset": :test
+      ]
     ]
   end
 
@@ -24,7 +34,7 @@ defmodule Transactions.Umbrella.MixProject do
   # Dependencies listed here are available only for this project
   # and cannot be accessed from applications inside the apps/ folder.
   defp deps do
-    []
+    [{:excoveralls, "~> 0.12", only: :test}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.
