@@ -7,11 +7,11 @@ defmodule Transactions do
   if it comes from the database, an external API or others.
   """
   alias Transactions.Accounts.Account
-  alias Transactions.Clients.Client
-  alias Transactions.Clients.Inputs.ClientsCreate
+  alias Transactions.Users.Inputs.UserInput
+  alias Transactions.Users.User
 
-  @spec create_client(%ClientsCreate{}) :: {:error} | {:ok, map()}
-  defdelegate create_client(params), to: Client.Create, as: :create_client
+  @spec create_user(%UserInput{}) :: {:error} | {:ok, map()}
+  defdelegate create_user(params), to: User.Create, as: :call
 
   defdelegate req_withdraw(params), to: Account.Withdraw, as: :call
   defdelegate req_transference(params), to: Account.Transference, as: :call
