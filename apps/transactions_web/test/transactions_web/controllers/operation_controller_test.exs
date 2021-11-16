@@ -1,23 +1,20 @@
 defmodule TransactionsWeb.OperationControllerTest do
   use TransactionsWeb.ConnCase
 
-  alias Transactions.Clients.Client.Create
-  alias Transactions.Clients.Inputs.ClientsCreate
+  import Transactions.Factory
+
+  alias Transactions.Users.User.Create
 
   setup %{conn: conn} do
     {:ok, %{account: account_origin}} =
-      Create.create_client(%ClientsCreate{
-        name: "account origin",
-        email: "origin@email.com",
-        email_confirmation: "origin@email.com"
-      })
+      Create.call(
+        build(:user_input, name: "account origin", email: "origin@email.com", cpf: "11122233311")
+      )
 
     {:ok, %{account: account_destiny}} =
-      Create.create_client(%ClientsCreate{
-        name: "account destiny",
-        email: "destiny@email.com",
-        email_confirmation: "destiny@email.com"
-      })
+      Create.call(
+        build(:user_input, name: "account destiny", email: "destiny@email.com", cpf: "11122233322")
+      )
 
     {:ok, conn: conn, account_origin: account_origin, account_destiny: account_destiny}
   end
@@ -25,7 +22,7 @@ defmodule TransactionsWeb.OperationControllerTest do
   describe "withdraw/2" do
     test "sucess when all parameters are valid, execute the withdrawal", ctx do
       params = %{
-        "source_account" => ctx.account_origin,
+        "source_account" => ctx.account_origin.code,
         "requested_amount" => "25000"
       }
 
@@ -58,7 +55,7 @@ defmodule TransactionsWeb.OperationControllerTest do
 
     test "fail when the requested amount is greater than available.", ctx do
       params = %{
-        "source_account" => ctx.account_origin,
+        "source_account" => ctx.account_origin.code,
         "requested_amount" => "125000"
       }
 
@@ -69,8 +66,6 @@ defmodule TransactionsWeb.OperationControllerTest do
     end
 
     test "fail when the account  not valid .", ctx do
-      # {:ok, %{client: %{account: account_number}}} = Create.create_client(@account)
-
       params = %{
         "source_account" => "123ab",
         "requested_amount" => "5000"
@@ -84,7 +79,7 @@ defmodule TransactionsWeb.OperationControllerTest do
 
     test "fail when the requested_amount  not valid", ctx do
       params = %{
-        "source_account" => ctx.account_origin,
+        "source_account" => ctx.account_origin.code,
         "requested_amount" => "invalid"
       }
 
@@ -98,8 +93,8 @@ defmodule TransactionsWeb.OperationControllerTest do
   describe "transference/2" do
     test "sucess when all parameters are valid, execute the trasference", ctx do
       params = %{
-        "source_account" => ctx.account_origin,
-        "target_account" => ctx.account_destiny,
+        "source_account" => ctx.account_origin.code,
+        "target_account" => ctx.account_destiny.code,
         "requested_amount" => 25_000
       }
 
@@ -110,8 +105,8 @@ defmodule TransactionsWeb.OperationControllerTest do
                  "source_account" => _,
                  "target_account" => _,
                  "transferred_value" => 25_000,
-                 "client_destiny_name" => "account destiny",
-                 "client_origin_name" => "account origin"
+                 "user_destiny_name" => "account destiny",
+                 "user_origin_name" => "account origin"
                }
              } =
                ctx.conn
@@ -122,7 +117,7 @@ defmodule TransactionsWeb.OperationControllerTest do
     test "fail when the original account number is invalid.", ctx do
       params = %{
         "source_account" => "00000",
-        "target_account" => ctx.account_destiny,
+        "target_account" => ctx.account_destiny.code,
         "requested_amount" => 25_000
       }
 
@@ -134,7 +129,7 @@ defmodule TransactionsWeb.OperationControllerTest do
 
     test "fail when the destination account number is invalid.", ctx do
       params = %{
-        "source_account" => ctx.account_origin,
+        "source_account" => ctx.account_origin.code,
         "target_account" => "00000",
         "requested_amount" => 25_000
       }
@@ -147,8 +142,8 @@ defmodule TransactionsWeb.OperationControllerTest do
 
     test "fail when requested amount is greater than the account balance", ctx do
       params = %{
-        "source_account" => ctx.account_origin,
-        "target_account" => ctx.account_destiny,
+        "source_account" => ctx.account_origin.code,
+        "target_account" => ctx.account_destiny.code,
         "requested_amount" => 125_000
       }
 
@@ -160,7 +155,7 @@ defmodule TransactionsWeb.OperationControllerTest do
 
     test "fail when the destination account number not numeric", ctx do
       params = %{
-        "source_account" => ctx.account_origin,
+        "source_account" => ctx.account_origin.code,
         "target_account" => "1212a",
         "requested_amount" => 25_000
       }
@@ -174,7 +169,7 @@ defmodule TransactionsWeb.OperationControllerTest do
     test "fail when the origin account number not numeric", ctx do
       params = %{
         "source_account" => "1212a",
-        "target_account" => ctx.account_destiny,
+        "target_account" => ctx.account_destiny.code,
         "requested_amount" => 25_000
       }
 

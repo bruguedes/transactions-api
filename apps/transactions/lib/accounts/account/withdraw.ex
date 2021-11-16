@@ -63,7 +63,7 @@ defmodule Transactions.Accounts.Account.Withdraw do
   defp withdraw({:error, msg}), do: {:error, msg}
 
   defp response_withdraw({:ok, account, value}) do
-    %{client: client, account: account, balance: balance} = Repo.preload(account, :client)
+    %{user: user, account: account, balance: balance} = Repo.preload(account, :user)
 
     current_balance = balance - value
 
@@ -71,8 +71,8 @@ defmodule Transactions.Accounts.Account.Withdraw do
      %{
        message: "Withdrawal successful!",
        transaction_data: %{
-         id: client.id,
-         name: client.name,
+         id: user.id,
+         name: user.name,
          account: account,
          current_balance: current_balance,
          withdrawn_amount: value

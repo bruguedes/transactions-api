@@ -3,32 +3,27 @@ defmodule Transactions.Accounts.Account.GetAccountTest do
   Test get accounts
   """
   use Transactions.DataCase
+
+  import Transactions.Factory
   alias Transactions.Accounts.Account.GetAccount
-  alias Transactions.Clients.Client.Create
-  alias Transactions.Clients.Inputs.ClientsCreate
+  alias Transactions.Users.User.Create
 
   describe "get/1" do
     test "fetches account data when parameters are valid" do
-      {:ok, %{account: account}} =
-        Create.create_client(%ClientsCreate{
-          name: "Test Created",
-          email: "test@email.com",
-          email_confirmation: "test@email.com",
-          password: "123456",
-          password_confirmation: "123456"
-        })
+      {:ok, %{account: %{code: code, id: account_id}, user: %{id: user_id}}} =
+        Create.call(build(:user_input))
 
       assert {
                :ok,
                %Transactions.Accounts.Schemas.Account{
                  balance: 100_000,
-                 account: _account,
-                 client_id: _client_id,
-                 id: _id,
-                 inserted_at: _inserted_at,
-                 updated_at: _updated_at
+                 account: ^code,
+                 user_id: ^user_id,
+                 id: ^account_id,
+                 inserted_at: _,
+                 updated_at: _
                }
-             } = GetAccount.get(account, :source_account)
+             } = GetAccount.get(code, :source_account)
     end
   end
 

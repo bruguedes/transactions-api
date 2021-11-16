@@ -2,34 +2,30 @@ defmodule Transactions.Accounts.Account.WithdrawTest do
   @moduledoc """
   Tests withdraw operation
   """
+  import Transactions.Factory
   use Transactions.DataCase
   alias Transactions.Accounts.Account.Withdraw
   alias Transactions.Accounts.Inputs.Withdraw, as: Inputs_Withdraw
-  alias Transactions.Clients.Client.Create
-  alias Transactions.Clients.Inputs.ClientsCreate
+  alias Transactions.Users.User.Create
 
   setup do
-    {:ok, %{account: account}} =
-      Create.create_client(%ClientsCreate{
-        name: "account origin",
-        email: "origin@email.com",
-        email_confirmation: "origin@email.com"
-      })
+    {:ok, %{account: account_origin}} =
+      Create.call(
+        build(:user_input, name: "account origin", email: "origin@email.com", cpf: "11122233311")
+      )
 
     {:ok, %{account: account_destiny}} =
-      Create.create_client(%ClientsCreate{
-        name: "account destiny",
-        email: "destiny@email.com",
-        email_confirmation: "destiny@email.com"
-      })
+      Create.call(
+        build(:user_input, name: "account destiny", email: "destiny@email.com", cpf: "11122233322")
+      )
 
-    {:ok, account: account, account_destiny: account_destiny}
+    {:ok, account_origin: account_origin, account_destiny: account_destiny}
   end
 
   describe "call/1" do
     test "sucess if all parameters are correct", ctx do
       params = %Inputs_Withdraw{
-        source_account: ctx.account,
+        source_account: ctx.account_origin.code,
         requested_amount: 25_000
       }
 
@@ -59,7 +55,7 @@ defmodule Transactions.Accounts.Account.WithdrawTest do
 
     test "fail if the requested amount is greater than in account", ctx do
       params = %Inputs_Withdraw{
-        source_account: ctx.account,
+        source_account: ctx.account_origin.code,
         requested_amount: 255_000
       }
 
