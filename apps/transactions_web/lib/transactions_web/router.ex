@@ -7,7 +7,7 @@ defmodule TransactionsWeb.Router do
 
   scope "/api" do
     pipe_through(:api)
-    post("/clients", TransactionsWeb.ClientController, :create)
+    post("/user", TransactionsWeb.UserController, :create)
     post("/operation/withdraw", TransactionsWeb.OperationController, :withdraw)
     post("/operation/transference", TransactionsWeb.OperationController, :transference)
   end
