@@ -1,4 +1,5 @@
 defmodule Transactions.Factory do
+  @moduledoc false
   use ExMachina.Ecto, repo: Transactions.Repo
 
   alias Ecto.UUID

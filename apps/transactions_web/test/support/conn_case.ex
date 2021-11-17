@@ -32,11 +32,13 @@ defmodule TransactionsWeb.ConnCase do
     end
   end
 
+  alias Ecto.Adapters.SQL.Sandbox
+
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Transactions.Repo)
+    :ok = Sandbox.checkout(Transactions.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Transactions.Repo, {:shared, self()})
+      Sandbox.mode(Transactions.Repo, {:shared, self()})
     end
 
     {:ok, conn: Phoenix.ConnTest.build_conn()}

@@ -1,4 +1,7 @@
 defmodule Transactions.BuildError do
+  @moduledoc """
+  Module for build message error
+  """
   @keys [:status, :result]
   @enforce_keys @keys
 
