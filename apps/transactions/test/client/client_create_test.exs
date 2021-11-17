@@ -27,8 +27,7 @@ defmodule Transactions.Clients.Client.CreateTest do
                  id: _id,
                  name: "account origin"
                }
-             } =
-               result_function
+             } = result_function
     end
 
     test "fails when email is already in use" do
