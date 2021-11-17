@@ -52,3 +52,6 @@ jobs:
             - _build
             - deps
             - ~/.mix
+      - run: mix ecto.create
+      - run: mix ecto.migrate
+      - run: mix test
