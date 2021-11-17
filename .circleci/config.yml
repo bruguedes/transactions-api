@@ -29,7 +29,6 @@ jobs:
 
       - run: mix local.hex --force
       - run: mix local.rebar --force
-      - run: mix format && mix credo --strict
 
       - restore_cache:
           key: deps-cache-{{ checksum "mix.lock" }}
@@ -53,6 +52,7 @@ jobs:
             - _build
             - deps
             - ~/.mix
+      - run: mix format && mix credo --strict
       - run: mix ecto.create
       - run: mix ecto.migrate
       - run: mix test
