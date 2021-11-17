@@ -31,9 +31,6 @@ jobs:
       - run: mix local.rebar --force
       - run: mix format --check-formatted
       - run: mix credo --strict
-      - run: mix coveralls.json
-        environment:
-          MIX_ENV: test
 
       - restore_cache:
           key: deps-cache-{{ checksum "mix.lock" }}
