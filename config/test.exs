@@ -20,3 +20,5 @@ config :transactions_web, TransactionsWeb.Endpoint,
 
 # Print only warnings and errors during test
 config :logger, level: :warn
+
+config :transactions, Transactions.Helper.Parse, via_cep_adapter: Transactions.ViaCep.ClientMock

@@ -13,6 +13,13 @@ use Mix.Config
 config :transactions,
   ecto_repos: [Transactions.Repo]
 
+config :transactions, Transactions.Repo,
+  migration_primary_key: [type: :binary_id],
+  migration_foreing_key: [type: :binary_id]
+
+# Configuração para determinar que esse será o adapter.
+config :transactions, Transactions.Helper.Parse, via_cep_adapter: Transactions.ViaCep.Client
+
 config :transactions_web,
   ecto_repos: [Transactions.Repo],
   generators: [context_app: :transactions, binary_id: true]

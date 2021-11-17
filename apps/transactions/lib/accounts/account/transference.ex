@@ -58,25 +58,25 @@ defmodule Transactions.Accounts.Account.Transference do
   end
 
   defp response_trasference(account_origin, account_destiny, value) do
-    %{id: id_o, client: client_o, account: account_o, balance: balance_o} =
-      Repo.preload(account_origin, :client)
+    %{id: id_o, user: user_o, account: account_o, balance: balance_o} =
+      Repo.preload(account_origin, :user)
 
     from(acc in Account, where: acc.id == ^id_o)
     |> Repo.update_all(set: [balance: balance_o])
 
-    %{id: id_d, client: client_d, account: account_d, balance: balance_d} =
-      Repo.preload(account_destiny, :client)
+    %{id: id_d, user: user_d, account: account_d, balance: balance_d} =
+      Repo.preload(account_destiny, :user)
 
     from(acc in Account, where: acc.id == ^id_d)
     |> Repo.update_all(set: [balance: balance_d])
 
     {:ok,
      %{
-       client_origin_name: client_o.name,
+       user_origin_name: user_o.name,
        source_account: account_o,
        current_balance: balance_o,
        transferred_value: value,
-       client_destiny_name: client_d.name,
+       user_destiny_name: user_d.name,
        target_account: account_d
      }}
   end

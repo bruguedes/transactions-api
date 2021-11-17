@@ -28,6 +28,8 @@ defmodule TransactionsWeb.ChannelCase do
     end
   end
 
+  alias Ecto.Adapters.SQL.Sandbox
+
   setup tags do
     :ok = Sandbox.checkout(Transactions.Repo)
 

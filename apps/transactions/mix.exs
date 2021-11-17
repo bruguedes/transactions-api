@@ -13,7 +13,14 @@ defmodule Transactions.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test
+      ]
     ]
   end
 
@@ -40,7 +47,13 @@ defmodule Transactions.MixProject do
       {:ecto_sql, "~> 3.4"},
       {:postgrex, ">= 0.0.0"},
       {:jason, "~> 1.0"},
-      {:credo, "~> 1.5", only: [:dev, :test], runtime: false}
+      {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
+      {:argon2_elixir, "~> 2.0"},
+      {:tesla, "~> 1.4.0"},
+      {:hackney, "~> 1.18.0"},
+      {:bypass, "~> 2.1", only: :test},
+      {:ex_machina, "~> 2.7.0"},
+      {:mox, "~> 1.0", only: :test}
     ]
   end
 
