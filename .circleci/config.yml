@@ -29,11 +29,7 @@ jobs:
 
       - run: mix local.hex --force
       - run: mix local.rebar --force
-      # - run: mix format --check-formatted
-      # - run: mix credo --strict
-      # - run: mix coveralls.json
-      #   environment:
-      #     MIX_ENV: test
+      - run: mix format && mix credo --strict
 
       - restore_cache:
           key: deps-cache-{{ checksum "mix.lock" }}
