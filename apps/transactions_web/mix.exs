@@ -51,7 +51,6 @@ defmodule TransactionsWeb.MixProject do
       {:transactions, in_umbrella: true},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"}
-      # {:excoveralls, "~> 0.10", only: :test}
     ]
   end
 

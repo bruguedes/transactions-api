@@ -64,7 +64,7 @@ defmodule TransactionsWeb.UserControllerTest do
         build(:user_params, %{
           "cpf" => "999888777",
           "email" => "user.com",
-          "cep" => "000000",
+          "cep" => "69905080",
           "password" => "123"
         })
 
@@ -79,7 +79,6 @@ defmodule TransactionsWeb.UserControllerTest do
 
       assert %{
                "message" => %{
-                 "cep" => ["should be 8 character(s)"],
                  "cpf" => ["should be 11 character(s)"],
                  "email" => ["has invalid format"],
                  "password" => ["should be at least 6 character(s)"]
