@@ -47,7 +47,6 @@ defmodule Transactions.MixProject do
       {:ecto_sql, "~> 3.4"},
       {:postgrex, ">= 0.0.0"},
       {:jason, "~> 1.0"},
-      {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
       {:argon2_elixir, "~> 2.0"},
       {:tesla, "~> 1.4.0"},
       {:hackney, "~> 1.18.0"},
