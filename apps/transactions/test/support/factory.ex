@@ -46,15 +46,6 @@ defmodule Transactions.Factory do
     }
   end
 
-  # def create_user_factory do
-  #   expect(ClientMock, :get_cep_info, fn _cep ->
-  #     {:ok, "Avenida Epaminonda Jácome, Habitasa, Rio Branco/AC"}
-  #   end)
-
-  #   params = build(:user_params)
-  #   {:ok, user} = UserCreate.call(params)
-  #   user
-  # enduser
   def account_factory do
     %Account{
       account: "00000",
